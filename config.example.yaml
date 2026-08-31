@@ -106,6 +106,34 @@ redis-usage-queue-retention-seconds: 60
 # Per-entry proxy-url also supports "direct" or "none" to bypass both the global proxy-url and environment proxies explicitly.
 proxy-url: ""
 
+# Proxy mode. Set to "proxy" (default) for regular HTTP/SOCKS proxy via proxy-url,
+# or "tor" to route all traffic through Tor SOCKS5 proxy with automatic IP rotation on error codes.
+# When set to "tor", the proxy-url field is ignored (use tor-proxy-addr instead).
+# proxy-mode: "proxy"
+
+# Tor SOCKS5 proxy address (used when proxy-mode is "tor").
+# Default: "127.0.0.1:9050"
+# tor-proxy-addr: "127.0.0.1:9050"
+
+# Tor control port address for sending NEWNYM signals to rotate the exit node IP.
+# Used when proxy-mode is "tor" and a retryable error code is received.
+# Default: "127.0.0.1:9051"
+# tor-control-addr: "127.0.0.1:9051"
+
+# Tor control port password (optional). Leave empty if no password is configured in torrc.
+# tor-control-password: ""
+
+# Maximum number of Tor IP rotation retries. When an error code from tor-retry-on-codes
+# is received, the system rotates the Tor IP and retries. Set to 0 for unlimited retries.
+# Default: 3
+# tor-retry-attempts: 3
+
+# HTTP status codes that trigger Tor IP rotation and retry.
+# When proxy-mode is "tor" and one of these codes is received from an upstream AI provider,
+# the system sends a NEWNYM signal to the Tor control port, waits for a new IP, and retries.
+# Default: [429, 403, 500, 502, 503]
+# tor-retry-on-codes: [429, 403, 500, 502, 503]
+
 # When true, unprefixed model requests only use credentials without a prefix (except when prefix == model name).
 force-model-prefix: false
 
